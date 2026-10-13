@@ -83,7 +83,17 @@ BUGHUB_DATABASE_PATH=可选的 SQLite 绝对路径
 REVALIDATE_SECRET=可选的手动页面刷新密钥
 ```
 
-后台功能可在同一个 `.env` 中另行配置 `ADMIN_HOST`、`ADMIN_USERNAME`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`、`PUBLIC_SITE_URL`，用于启用独立域名的管理后台；其中密码哈希用 `npm run admin:hash-password -- '强密码'` 生成，只把结果写入 `.env`。完整说明见 [`DEPLOY.md`](DEPLOY.md) 第 10 节。
+后台功能可在同一个 `.env` 中另行配置 `ADMIN_HOST`、`ADMIN_USERNAME`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`、`PUBLIC_SITE_URL`，用于启用独立域名的管理后台。
+
+密码哈希用 `npm run admin:hash-password -- '强密码'` 生成（至少 10 位），输出是可直接整行粘贴进 `.env` 的内容，其中的 `$` 已转义为 `\$`。不要手写或手动改动这一行：`.env` 里未转义的 `$` 会被 Next 当成变量展开，登录页会提示“缺少或格式无效：ADMIN_PASSWORD_HASH”。修改密码后，所有已登录的会话会立即失效。
+
+### 管理后台
+
+- 本地开发：`npm run dev` 后访问 `http://localhost:3000/admin`。
+- 生产环境：只能通过独立的后台域名（如 `admin.bughub.vip`）访问，主域名下的 `/admin` 返回 404。
+- 内容列表显示“已发布 / 草稿”状态和分类，支持按状态筛选、搜索，以及一键发布 / 下线；只有“已发布”的内容会出现在公开站点。
+- 新建和编辑时可以选择状态与一级、二级分类；删除前会二次确认，保存带乐观锁，防止两个窗口互相覆盖。
+- 登录失败 5 次后同一 IP 锁定 15 分钟。Nginx 必须设置 `proxy_set_header X-Real-IP $remote_addr;`，限流依赖它识别真实 IP。
 
 内容查询不使用长缓存，数据库写入后刷新页面即可看到变化。若部署层仍缓存页面，可调用：
 

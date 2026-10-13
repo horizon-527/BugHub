@@ -1,20 +1,24 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+#
+# 注意：代码已经搬进 app-code/，所以下面的规则都不要以 / 开头。
+# 以 / 开头只匹配仓库根目录，对 app-code/ 和 bughub-mcp/ 里的同名目录不生效，
+# 之前就是这样导致 27000 多个 node_modules 文件出现在 git 改动里。
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 .yarn/install-state.gz
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -25,7 +29,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local env files（里面是管理员密码哈希和会话密钥）
+.env
 .env*.local
 
 # vercel
@@ -35,10 +40,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local env
-.env
+# 本地 SQLite 数据库、WAL、导出目录和备份。数据库里有草稿和未发布内容，不进仓库。
+.data/
+*.sqlite
+*.sqlite-*
 
-# local SQLite content
-/.data/*.sqlite
-/.data/*.sqlite-*
-/.data/exports/
+# ⚠️ 公司内部真实 bug 数据（含未脱敏原文），禁止进入仓库
+minos-bug-treasure/
+.tmp_full/
+.tmp_rebuild/
+
+# ⚠️ 入库提示词：示例里写了真实的内部系统名、服务名、表名和配置键（用来告诉 AI 要脱敏什么），
+# 推到公开仓库就等于泄露这份清单。只保留在本地，请另行备份。
+workflow/提示词.md
+
+# IDE / Agent 工作目录
+.kiro/

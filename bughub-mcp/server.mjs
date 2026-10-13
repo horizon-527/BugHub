@@ -123,7 +123,7 @@ server.registerTool(
     title: "按当前任务自查相关坑",
     description: "输入你正在写的功能或代码意图的自然语言描述，返回最相关的常见 Bug 及其测试要点，用于动手前规避、动手后自查。",
     inputSchema: {
-      description: z.string().describe("正在实现或审查的功能/代码意图，如“换电柜格并发占用与释放”"),
+      description: z.string().describe("正在实现或审查的功能/代码意图，如“订单并发扣减库存与释放”"),
       limit: z.number().int().min(1).max(20).optional().describe("返回条数，默认 6"),
     },
   },
