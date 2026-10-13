@@ -7,14 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predev": "npm run db:init",
-    "prebuild": "npm run db:init",
-    "db:init": "tsx scripts/db.ts init",
-    "db:stats": "tsx scripts/db.ts stats",
-    "db:reset": "tsx scripts/db.ts reset",
-    "db:export": "tsx scripts/db.ts export",
-    "db:import": "tsx scripts/db.ts import",
-    "db:delete": "tsx scripts/db.ts delete",
     "admin:hash-password": "tsx scripts/hash-password.ts"
   },
   "dependencies": {
